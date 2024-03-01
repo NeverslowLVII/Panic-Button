@@ -1,7 +1,4 @@
-# authentication.py
-
 import getpass
-from cryptography.fernet import Fernet
 from security_frameworks import SecurityManager
 
 class AuthenticationManager:

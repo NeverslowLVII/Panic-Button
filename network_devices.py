@@ -52,7 +52,7 @@ def initialize_network_devices():
     :return: Liste d'instances NetworkDevice.
     """
     devices = []
-    for device_name, device_info in NETWORK_DEVICES.items():
+    for _, device_info in NETWORK_DEVICES.items():
         device = NetworkDevice(device_info)
         devices.append(device)
     return devices

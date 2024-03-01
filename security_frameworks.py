@@ -58,8 +58,13 @@ class SecurityManager:
     def execute_ssh_command(self, command):
         """
         Exécute une commande sur l'appareil distant via SSH.
+        Cette version ajoute une validation de base pour prévenir l'injection de commandes shell.
         """
-        stdin, stdout, stderr = self.ssh_client.exec_command(command)
+        # Validation de base pour prévenir l'injection de commandes shell
+        if ';' in command or '&&' in command or '|' in command:
+            raise ValueError("Invalid characters in command.")
+        
+        _, stdout, stderr = self.ssh_client.exec_command(command)
         return stdout.read().decode()
 
     def close_ssh_connection(self):
