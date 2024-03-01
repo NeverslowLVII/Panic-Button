@@ -1,5 +1,6 @@
 import paramiko
 from cryptography.fernet import Fernet
+import os
 
 class SecurityManager:
     """
@@ -9,7 +10,7 @@ class SecurityManager:
 
     def __init__(self):
         self.ssh_client = paramiko.SSHClient()
-        self.ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.ssh_client.set_missing_host_key_policy(paramiko.RejectPolicy())
         self.encryption_key = None
 
     def generate_encryption_key(self):
@@ -82,7 +83,12 @@ if __name__ == "__main__":
     print(f"Données déchiffrées: {decrypted_data}")
 
     # Exemple d'établissement d'une connexion SSH et d'exécution d'une commande
-    security_manager.establish_ssh_connection("192.168.1.1", 22, "admin", "password")
+    hostname = os.getenv("SSH_HOSTNAME", "192.168.1.1")
+    port = int(os.getenv("SSH_PORT", "22"))
+    username = os.getenv("SSH_USERNAME", "admin")
+    password = os.getenv("SSH_PASSWORD", "password")
+
+    security_manager.establish_ssh_connection(hostname, port, username, password)
     output = security_manager.execute_ssh_command("show ip interface brief")
     print(output)
     security_manager.close_ssh_connection()
